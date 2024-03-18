@@ -37,17 +37,15 @@ class QuizDataSupplier
      */
     public function getFinishedQuizzesByUser(UserInterface $user): array
     {
-        $quizzes = $this->quizRepository->findBy([
+        return $this->quizRepository->findBy([
             'owner' => $this->validateUser($user),
             'active' => false,
         ]);
-        if (count($quizzes) === 0) {
-            throw new QuizNotFoundException('No any Quiz found');
-        }
-
-        return $quizzes;
     }
 
+    /**
+     * @throws QuizNotFoundException
+     */
     public function getActiveQuizOrNullByUser(UserInterface $user): ?Quiz
     {
         return $this->quizRepository->findOneBy([
@@ -82,6 +80,9 @@ class QuizDataSupplier
         return $result;
     }
 
+    /**
+     * @throws QuizNotFoundException
+     */
     public function validateUser(UserInterface $user): User
     {
         if (!$user instanceof User) {
