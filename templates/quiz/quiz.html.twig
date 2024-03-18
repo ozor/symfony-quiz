@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quiz #{{ questions.quizId }}{% endblock %}
+
+{% block body %}
+<div>
+    <h2 class="p-3">Quiz #{{ questions.quizId }}</h2>
+
+    <form action="{{ path('app_submit') }}" method="post" id="quiz-form">
+        <input type="hidden" name="current_question" class="current-question" value="{{ questions.current.id }}">
+
+        <nav aria-label="Quiz question navigation">
+            <ul class="pagination pagination-sm">
+                {% for i in 1..questions.count %}
+                <li class="page-item"><span class="page-link linkIndex-{{ i }}" >{{ i }}</span></li>
+                {% endfor %}
+            </ul>
+        </nav>
+
+        <div class="loading card p-3">
+            <div class="card-body">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Quiz is loading, please wait a few seconds...</span>
+                </div>
+            </div>
+        </div>
+
+        {% for result in questions.results %}
+            {% set question = result.question %}
+        <div
+            class="
+                question-container
+                index-{{ loop.index0 }}
+                question-{{ result.resultId }}
+            "
+            data-index="{{ loop.index0 }}"
+            data-resultId="{{ result.resultId }}"
+            style="display: none"
+        >
+
+            <div class="card">
+                <div class="card-header">
+                    Question {{ loop.index }} of {{ loop.length }}
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ question.question }}</h5>
+
+                        <h6 class="card-subtitle my-2 text-body-tertiary">
+                            {% if question.isAnswered %}You have already answered to this question{% endif %}
+                        </h6>
+
+                    <div class="card-text">
+
+                        <div class="answers-{{ result.resultId }} gap-3 p-1">
+                            {% for answer in result.answers %}
+                                <div class="form-check">
+                                    <input type="checkbox"
+                                           name="answer[{{ result.resultId }}][{{ answer.answerId }}]"
+                                           id="Answer{{ result.resultId }}Check{{ answer.answerId }}"
+                                           class="form-check-input"
+                                           value="1"
+                                           data-answer="{{ answer.answerId }}"
+                                           {% if answer.isChoosed %}checked="checked"{% endif %}
+                                    > <label class="form-check-label"
+                                             for="Answer{{ result.resultId }}Check{{ answer.answerId }}"
+                                    >{{ answer.answer }}</label>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                    </div>
+
+                    <div class="p-1">
+                        <input type="button"
+                                {% if loop.last != 1 %}
+                                    value="Save and go next"
+                                    class="next-button btn btn-dark"
+                                {% else %}
+                                    value="Save and finish"
+                                    class="next-button btn btn-primary"
+                                    onclick="return confirm('You are about to finish this quiz. Then you will not be able to edit the answers. Continue?');"
+                                {% endif %}
+                               data-resultId="{{ result.resultId }}"
+                               data-next="{% if loop.last != 1 %}{{ loop.index }}{% endif %}"
+                        >
+                    </div>
+
+                </div>
+
+                <div class="card-footer text-body-secondary">
+                    <a href="{{ path('app_index') }}">Go Home</a>
+                </div>
+            </div>
+
+
+        </div>
+        {% endfor %}
+
+    </form>
+
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>const update_url = "{{ path('app_update') }}";</script>
+    {{ encore_entry_script_tags('quiz') }}
+{% endblock %}

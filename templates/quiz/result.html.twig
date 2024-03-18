@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% macro answerRow(value, isCorrect, isChoosed) %}
+    <div class="my-1 p-1
+        {% if isCorrect %}bg-success-subtle{% endif %}
+        {% if isChoosed %}
+            fw-bold text-success
+            {% if isCorrect %}text-success{% else %}text-danger{% endif %}
+        {% endif %}
+    ">
+        {{ value }} {% if isChoosed %}<i class="fw-light">(Your choose)</i>{% endif %}
+    </div>
+{% endmacro %}
+
+{% block title %}Quiz #{{ quiz.quizId }} Result{% endblock %}
+
+{% block body %}
+<div>
+    <h2 class="p-3">Quiz #{{ quiz.quizId }}</h2>
+
+
+    <div class="row">
+        <div class="col-sm-6 mb-3 mb-sm-0">
+            <div class="card border-success">
+                <div class="card-header bg-success-subtle">
+                    <h5 class="card-title pt-2">Correct answers</h5>
+                </div>
+                <div class="card-body">
+                    <div class="card-text">
+
+                        {% for result in quiz.correctResults %}
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <b>{{ result.question }}</b>
+                                </div>
+                                <div class="card-body">
+                                    <div class="card-text">
+
+                                        {% for answer in result.answers %}
+                                            <div>
+                                                {{ _self.answerRow(answer.answer, answer.isCorrect, answer.isChoosed) }}
+                                            </div>
+                                        {% endfor %}
+
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card border-danger">
+                <div class="card-header bg-danger-subtle">
+                    <h5 class="card-title pt-2">Wrong answers</h5>
+                </div>
+                <div class="card-body">
+                    <div class="card-text">
+
+                        {% for result in quiz.wrongResults %}
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <b>{{ result.question }}</b>
+                                </div>
+                                <div class="card-body">
+                                    <div class="card-text">
+
+                                        {% for answer in result.answers %}
+                                            <div>
+                                                {{ _self.answerRow(answer.answer, answer.isCorrect, answer.isChoosed) }}
+                                            </div>
+                                        {% endfor %}
+
+                                        {% if result.numChooses == 0 %}
+                                            <div><i class="fw-light text-danger">(No one answer chosen)</i></div>
+                                        {% endif %}
+
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="card my-5">
+    <div class="card-body">
+        <a href="{{ path('app_index') }}">Go Home</a>
+    </div>
+</div>
+
+{% endblock %}

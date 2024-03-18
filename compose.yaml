@@ -17,8 +17,8 @@ services:
       - *volume_root_project
     networks:
       - docker
-    environment:
-      PHP_IDE_CONFIG: "serverName=app"
+    depends_on:
+      - database
 
   nginx:
     restart: always
@@ -32,20 +32,22 @@ services:
       - "8098:80"
     depends_on:
       - app
+      - database
 
 
 ###> doctrine/doctrine-bundle ###
   database:
-    image: postgres:${POSTGRES_VERSION:-16}-alpine
+    image: postgres:16-alpine
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-app}
-      # You should definitely change the password in production
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
-      POSTGRES_USER: ${POSTGRES_USER:-app}
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      TZ: Europe/Moscow
+      PGTZ: Europe/Moscow
+    ports:
+      - "55432:5432"
     volumes:
       - database_data:/var/lib/postgresql/data:rw
-      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/db/data:/var/lib/postgresql/data:rw
     networks:
       - docker
 ###< doctrine/doctrine-bundle ###

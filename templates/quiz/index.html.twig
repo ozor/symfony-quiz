@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello QuizController!{% endblock %}
+
+{% block body %}
+<div>
+
+    <h1>Quiz</h1>
+
+    {% for message in app.flashes('error') %}
+        <div class="flash-notice alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div class="accordion my-5" id="accordionPanelsStayOpenExample">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button fw-bold bg-dark-subtle" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                    Quiz Menu
+                </button>
+            </h2>
+            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
+                <div class="accordion-body">
+
+                    {% if active_quiz %}
+                        <div>Есть незавершённый тест</div>
+                        <div>
+                            <span>Тест №{{ active_quiz.id }}</span> <a href="{{ path('app_quiz') }}">Продолжить</a>
+                        </div>
+                        <div>
+                            <a href="{{ path('app_start') }}">Завершить текущий и начать новый</a>
+                        </div>
+                    {% else %}
+                        <div>
+                            <a href="{{ path('app_start') }}">Начать тестирование</a>
+                        </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-bold bg-dark-subtle" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                    Finished Quizzes
+                </button>
+            </h2>
+            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
+                <div class="accordion-body">
+
+                    {% if not finished_quizzes %}
+                        <div>Нет ни одного незавершённого теста</div>
+                    {% else %}
+
+                        <ul class="list-group list-group-flush">
+                            {% for item in finished_quizzes %}
+                                <li class="list-group-item"><a href="{{ path('app_result', {'quizId': item.id }) }}">Тест №{{ item.id }}</a> {% if item.startedAt %} / {{ item.startedAt }}{% endif %}</li>
+                            {% endfor %}
+                        </ul>
+
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
