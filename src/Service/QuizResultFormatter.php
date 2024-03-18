@@ -34,6 +34,7 @@ class QuizResultFormatter
             $outputResults[] = new ResultDto($result->getId(), $question, $answers);
 
             if ($currentResultId && $currentResultId === $result->getId()) {
+//                var_dump($currentResultId, $currentResultIndex, $i); exit;
                 $currentResultIndex = $i;
             }
             $i++;

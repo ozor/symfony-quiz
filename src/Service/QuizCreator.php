@@ -28,6 +28,7 @@ readonly class QuizCreator
         $this->entityManager->persist($quiz);
 
         $questions = $this->questionRepository->findAll();
+        shuffle($questions);
 
         $firstResult = null;
         foreach ($questions as $question) {
@@ -43,8 +44,11 @@ readonly class QuizCreator
                 $firstResult = $result;
             }
 
+            $answers = $question->getAnswers()->toArray();
+            shuffle($answers);
+
             $answerData = [];
-            foreach ($question->getAnswers() as $answer) {
+            foreach ($answers as $answer) {
                 $answerData[] = [
                     'answerId' => $answer->getId(),
                     'answer' => $answer->getAnswer(),

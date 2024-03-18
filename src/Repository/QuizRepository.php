@@ -31,6 +31,7 @@ class QuizRepository extends ServiceEntityRepository
             ->where('q.owner = :user')
             ->andWhere('q.active = true')
             ->setParameter('user', $user)
+            ->orderBy('r.id', 'ASC')
             ->getQuery()
             ->getOneOrNullResult();
     }

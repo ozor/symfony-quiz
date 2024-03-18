@@ -13,7 +13,7 @@ class QuizUpdater
     ) {
     }
 
-    public function updateQuiz(Quiz $quiz, int $resultId): void
+    public function updateQuiz(Quiz $quiz, ?int $resultId): void
     {
         $quiz->setCurrentResultId($resultId);
         $this->entityManager->flush();

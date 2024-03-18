@@ -26,7 +26,7 @@
                     {% if active_quiz %}
                         <div>There is unfinished Quiz</div>
                         <div>
-                            <span>Тест №{{ active_quiz.id }}</span> <a href="{{ path('app_quiz') }}">Continue</a>
+                            <span>Quiz №{{ active_quiz.id }}</span> <a href="{{ path('app_quiz') }}">Continue</a>
                         </div>
                         <div>
                             <a href="{{ path('app_start') }}">Finish this Quiz and start a new one</a>
@@ -63,6 +63,12 @@
 
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="card my-5">
+        <div class="card-body">
+            <a href="{{ path('app_logout') }}">Logout</a>
         </div>
     </div>
 

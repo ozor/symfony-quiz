@@ -18,7 +18,7 @@ class AjaxController extends AbstractController
     ) {
     }
 
-    #[Route('/update', name: 'app_update', methods: [Request::METHOD_POST])]
+    #[Route('/update', name: 'app_ajax_update', methods: [Request::METHOD_POST])]
     public function update(Request $request): Response
     {
         try {
@@ -31,6 +31,17 @@ class AjaxController extends AbstractController
                 )
             );
             return $this->json('OK');
+        } catch (Exception $e) {
+            return $this->json($e->getMessage(), 400);
+        }
+    }
+
+    #[Route('/get', name: 'app_ajax_get', methods: [Request::METHOD_GET])]
+    public function get(Request $request): Response
+    {
+        try {
+            $this->quiz->setUser($this->getUser());
+            return $this->json(['questions' => $this->quiz->getActiveUserQuizQuestionsWithAnswers()]);
         } catch (Exception $e) {
             return $this->json($e->getMessage(), 400);
         }

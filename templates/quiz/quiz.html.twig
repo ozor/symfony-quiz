@@ -7,6 +7,59 @@
     <h2 class="p-3">Quiz #{{ questions.quizId }}</h2>
 
     <form action="{{ path('app_submit') }}" method="post" id="quiz-form">
+
+        <nav aria-label="Quiz question navigation">
+            <ul class="pagination pagination-sm">
+            </ul>
+        </nav>
+
+        <div class="card">
+            <div class="card-header">
+                Question <span class="questions-current">1</span> of <span class="questions-total">10</span>
+            </div>
+            <div class="card-body">
+
+                <div class="card-body-container" style="display: none;">
+                    <h5 class="card-title question-title"></h5>
+
+                    <div class="card-text">
+
+                        <div class="answers-block gap-3 p-1">
+
+                            <div class="form-check">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="p-1">
+                        <input type="button" value="Save and go next"  class="next-button btn btn-dark">
+                    </div>
+                </div>
+
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Quiz is loading, please wait a few seconds...</span>
+                </div>
+
+            </div>
+
+            <div class="card-footer text-body-secondary">
+                <a href="{{ path('app_index') }}">Go Home</a>
+            </div>
+        </div>
+
+    </form>
+
+</div>
+{% endblock %}
+
+
+{# block body
+<div>
+    <h2 class="p-3">Quiz #{{ questions.quizId }}</h2>
+
+    <form action="{{ path('app_submit') }}" method="post" id="quiz-form">
         <input type="hidden" name="current_question" class="current-question" value="{{ questions.current.id }}">
 
         <nav aria-label="Quiz question navigation">
@@ -78,7 +131,6 @@
                                 {% else %}
                                     value="Save and finish"
                                     class="next-button btn btn-primary"
-                                    onclick="return confirm('You are about to finish this quiz. Then you will not be able to edit the answers. Continue?');"
                                 {% endif %}
                                data-resultId="{{ result.resultId }}"
                                data-next="{% if loop.last != 1 %}{{ loop.index }}{% endif %}"
@@ -99,11 +151,14 @@
     </form>
 
 </div>
-{% endblock %}
+{% endblock #}
 
 {% block javascripts %}
     {{ parent() }}
 
-    <script>const update_url = "{{ path('app_update') }}";</script>
+    <script>
+        const get_url = "{{ path('app_ajax_get') }}";
+        const update_url = "{{ path('app_ajax_update') }}";
+    </script>
     {{ encore_entry_script_tags('quiz') }}
 {% endblock %}

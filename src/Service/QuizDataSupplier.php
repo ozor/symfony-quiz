@@ -37,10 +37,13 @@ class QuizDataSupplier
      */
     public function getFinishedQuizzesByUser(UserInterface $user): array
     {
-        return $this->quizRepository->findBy([
-            'owner' => $this->validateUser($user),
-            'active' => false,
-        ]);
+        return $this->quizRepository->findBy(
+            [
+                'owner' => $this->validateUser($user),
+                'active' => false,
+            ],
+            ['id' => 'DESC']
+        );
     }
 
     /**
