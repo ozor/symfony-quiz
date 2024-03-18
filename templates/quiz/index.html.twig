@@ -24,16 +24,16 @@
                 <div class="accordion-body">
 
                     {% if active_quiz %}
-                        <div>Есть незавершённый тест</div>
+                        <div>There is unfinished Quiz</div>
                         <div>
-                            <span>Тест №{{ active_quiz.id }}</span> <a href="{{ path('app_quiz') }}">Продолжить</a>
+                            <span>Тест №{{ active_quiz.id }}</span> <a href="{{ path('app_quiz') }}">Continue</a>
                         </div>
                         <div>
-                            <a href="{{ path('app_start') }}">Завершить текущий и начать новый</a>
+                            <a href="{{ path('app_start') }}">Finish this Quiz and start a new one</a>
                         </div>
                     {% else %}
                         <div>
-                            <a href="{{ path('app_start') }}">Начать тестирование</a>
+                            <a href="{{ path('app_start') }}">Start a new Quiz</a>
                         </div>
                     {% endif %}
 
@@ -50,12 +50,12 @@
                 <div class="accordion-body">
 
                     {% if not finished_quizzes %}
-                        <div>Нет ни одного незавершённого теста</div>
+                        <div>There is no any finished Quiz</div>
                     {% else %}
 
                         <ul class="list-group list-group-flush">
                             {% for item in finished_quizzes %}
-                                <li class="list-group-item"><a href="{{ path('app_result', {'quizId': item.id }) }}">Тест №{{ item.id }}</a> {% if item.startedAt %} / {{ item.startedAt }}{% endif %}</li>
+                                <li class="list-group-item"><a href="{{ path('app_result', {'quizId': item.id }) }}">Quiz №{{ item.id }}</a> {% if item.startedAt %} / {{ item.startedAt }}{% endif %}</li>
                             {% endfor %}
                         </ul>
 
